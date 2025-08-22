@@ -1,71 +1,70 @@
-# Akıllı Borç Tahsilat Stratejisi Ajanı (RL ile)
+# Intelligent Debt Collection Strategy Agent (with RL)
 
-Bu proje, Pekiştirmeli Öğrenme (Reinforcement Learning - RL) kullanarak, finansal kurumlar için kârlılığı maksimize eden bir borç tahsilat stratejisi geliştirmektedir. Geliştirilen RL ajanı, her bir müşterinin durumuna (borç, gecikme günü vb.) göre en uygun iletişim kanalını (SMS, Arama, Bekleme) dinamik olarak seçmeyi öğrenir.
+This project develops a debt collection strategy for financial institutions using Reinforcement Learning (RL) to maximize profitability. The RL agent learns to dynamically select the most suitable communication channel (SMS, Call, Wait) for each customer based on their status (debt amount, days overdue, etc.).
 
-Proje, maliyet minimizasyonu ve tahsilat maksimizasyonu arasındaki dengeyi bulma problemine modern bir yapay zeka çözümü sunar.
+The project provides a modern AI solution to the challenge of balancing cost minimization with collection maximization.
 
-## Projenin Çözdüğü Problem
+## Problem Statement
 
-Geleneksel borç tahsilat sistemleri genellikle statik kurallara dayanır. Bu proje ise her müşteriyi benzersiz bir vaka olarak ele alır ve şu sorulara dinamik yanıtlar bulur:
-- Hangi müşteriyi aramalıyız, hangisine sadece bir hatırlatma yeterli?
-- Ne zaman proaktif davranmalı, ne zaman beklemek daha kârlı?
-- Müşteriyi kaybetme (churn) riskini göze alarak hangi adımı atmalıyız?
+Traditional debt collection systems often rely on static rules. This project treats each customer as a unique case and dynamically answers questions such as:
+- Which customers should we call, and which only need a reminder?
+- When should we be proactive, and when is it more profitable to wait?
+- When is it worth taking the risk of customer churn?
 
-Ajan, bu kararları binlerce simülasyon üzerinden deneme-yanılma yoluyla öğrenerek en kârlı stratejiyi kendisi keşfeder.
+The agent discovers the most profitable strategy by learning through trial and error across thousands of simulations.
 
-## Teknolojiler ve Mimari
+## Technologies and Architecture
 
-- **Programlama Dili:** Python
-- **RL Kütüphaneleri:**
-  - `Gymnasium`: Müşteri davranışlarını ve iş kurallarını simüle eden özel RL ortamı için.
-  - `Stable-Baselines3`: Endüstri standardı Derin Q-Network (DQN) algoritmasını uygulamak için.
-- **Veri Yönetimi:** `Pandas` & `Numpy`
+- **Programming Language:** Python  
+- **RL Libraries:**
+  - `Gymnasium`: For the custom RL environment simulating customer behavior and business rules.
+  - `Stable-Baselines3`: For implementing the industry-standard Deep Q-Network (DQN) algorithm.
+- **Data Management:** `Pandas` & `Numpy`
 
-Mimarinin kalbinde, müşteri personalarını ve bu personaların farklı iletişim kanallarına verdikleri tepkileri modelleyen bir simülasyon ortamı bulunmaktadır.
+At the heart of the architecture is a simulation environment modeling customer personas and their responses to different communication channels.
 
-### RL Tasarımı
+### RL Design
 
-- **Durum (State):** `[Borç Miktarı, Gecikme Günü, Ödeme Geçmişi Skoru]`
-- **Eylemler (Actions):** `[SMS Gönder, E-posta Gönder, Arama Yap, Bekle]`
-- **Ödül Stratejisi (Reward):** Ajanın davranışını "akıllı kârlılık" yönünde şekillendiren, dikkatle tasarlanmış bir ödül-ceza mekanizması:
-  - **Yüksek Ödül:** Başarılı tahsilat (özellikle arama ile yapılırsa ekstra bonus).
-  - **Yüksek Ceza:** Müşteri kaybı (churn) veya borcun zaman aşımına uğraması.
-  - **Düşük Maliyet:** Her iletişim denemesinin operasyonel maliyeti.
+- **State:** `[Debt Amount, Days Overdue, Payment History Score]`
+- **Actions:** `[Send SMS, Send Email, Make Call, Wait]`
+- **Reward Strategy:** A carefully designed reward-punishment mechanism to shape the agent’s behavior toward "smart profitability":
+  - **High Reward:** Successful collection (extra bonus if achieved via call).
+  - **High Penalty:** Customer churn or debt expiring.
+  - **Low Cost:** Operational cost for each communication attempt.
 
-## Sonuçlar: Akıllı ve Kârlı Bir Ajan
+## Results: An Intelligent and Profitable Agent
 
-Titiz bir "ödül mühendisliği" ve model eğitimi sonucunda, ajan son derece etkili ve kârlı bir strateji öğrenmeyi başarmıştır. 500 farklı müşteri senaryosunda yapılan testlerin sonuçları şöyledir:
+After rigorous reward engineering and model training, the agent successfully learned a highly effective and profitable strategy. Results from testing across 500 different customer scenarios are as follows:
 
-| Metrik                  | Sonuç                       | Yorum                                                                                             |
-| ----------------------- | --------------------------- | ------------------------------------------------------------------------------------------------- |
-| **Ortalama Toplam Ödül**  | **+162.84**                 | Ajanın stratejisi yüksek derecede kârlıdır.                                                         |
-| **Başarılı Tahsilat Oranı** | **%86.2**                   | Müşterilerin büyük çoğunluğundan borç başarılı bir şekilde tahsil edildi.                         |
-| **Zaman Aşımı Oranı**       | **%4.4**                    | Pasif kalarak fırsatları kaçırma sorunu neredeyse tamamen ortadan kalktı.                          |
-| **Müşteri Kaybı Oranı**   | **%9.4**                    | Ajan, genel kârlılık için hesaplanmış riskler almaktan çekinmiyor.                                |
+| Metric                   | Result          | Comment                                                                 |
+| ------------------------- | --------------- | ----------------------------------------------------------------------- |
+| **Average Total Reward**  | **+162.84**     | The agent’s strategy is highly profitable.                               |
+| **Successful Collection Rate** | **86.2%**   | Debts were successfully collected from the vast majority of customers.   |
+| **Expiration Rate**       | **4.4%**        | The problem of passively missing opportunities was nearly eliminated.    |
+| **Customer Churn Rate**   | **9.4%**        | The agent takes calculated risks for overall profitability.              |
 
-### Ajanın Öğrendiği Strateji
+### Strategy Learned by the Agent
 
-- **Arama Yap (%69.1):** Ajan, "Arama" eyleminin en güçlü ve etkili araç olduğunu öğrendi ve bunu ana stratejisi olarak benimsedi.
-- **Bekle (%27.0):** Herkese hemen saldırmak yerine, doğru anı beklemeyi de biliyor. Bu, stratejisinin "akıllı" olduğunu gösterir.
-- **SMS Gönder (%3.9):** Sadece çok spesifik ve düşük riskli durumlarda kullanılan bir araç.
+- **Make Call (69.1%):** Learned that calling is the most powerful and effective tool and adopted it as the main strategy.  
+- **Wait (27.0%):** Knows when to hold back instead of immediately acting, showing “smart” strategy.  
+- **Send SMS (3.9%):** Used only in very specific, low-risk scenarios.  
 
-## Proje Yapısı ve Dosyalar
+## Project Structure and Files
 
-Proje, her biri belirli bir görevi yerine getiren modüler Python betiklerinden oluşur.
+The project consists of modular Python scripts, each fulfilling a specific role.
 
-- **`DataFrame.py`**: Projenin temelini oluşturan `synthetic_customer_data.csv` dosyasını üretir. Gerçekçi senaryolar yaratmak için, farklı müşteri personalarına dayalı olarak mantıksal ve tutarlı veriler oluşturur.
+- **`DataFrame.py`**: Generates the core dataset `synthetic_customer_data.csv`. Creates logical and consistent data based on different customer personas to simulate realistic scenarios.
 
-- **`debt_collection_env.py`**: `Gymnasium` kütüphanesini kullanarak, RL ajanının etkileşimde bulunacağı özel simülasyon ortamını yaratır. Ajanın davranışını şekillendiren "oyun kuralları", ödül-ceza mekanizması ve müşteri davranışları bu dosyada tanımlanır.
+- **`debt_collection_env.py`**: Builds the custom simulation environment using `Gymnasium`. Defines the “game rules,” reward-punishment mechanism, and customer behavior shaping the agent’s learning.
 
-- **`train.py`**: `Stable-Baselines3` kütüphanesini kullanarak Pekiştirmeli Öğrenme ajanını sıfırdan eğitir. Eğitim tamamlandığında, ajanın öğrendiği stratejiyi içeren `dqn_debt_collector.zip` adlı bir model dosyası oluşturur.
+- **`train.py`**: Trains the RL agent from scratch using `Stable-Baselines3`. Produces the trained model file `dqn_debt_collector.zip`.
 
-- **`evaluate.py`**: Eğitilmiş ajanın (`dqn_debt_collector.zip`) ne kadar etkili olduğunu test eder. Yüzlerce farklı müşteri senaryosunda performansını ölçer ve sonuçları konsola raporlar.
+- **`evaluate.py`**: Tests the trained agent (`dqn_debt_collector.zip`). Evaluates its performance across hundreds of customer scenarios and reports the results.
 
-- **`dqn_debt_collector.zip`**: `train.py` tarafından oluşturulan, eğitilmiş ve kullanıma hazır model dosyasıdır.
+- **`dqn_debt_collector.zip`**: The trained, ready-to-use model generated by `train.py`.
 
-- **`synthetic_customer_data.csv`**: `DataFrame.py` tarafından oluşturulan ve ajan tarafından eğitim ve test aşamalarında kullanılan sentetik müşteri veri setidir.
+- **`synthetic_customer_data.csv`**: The synthetic dataset created by `DataFrame.py`, used by the agent during training and testing.
 
-## Portfolyo Değeri
+## Portfolio Value
 
-Bu proje, klasik sınıflandırma problemlerinin ötesine geçerek, dinamik ve stratejik bir iş problemini Pekiştirmeli Öğrenme ile modelleme yeteneğini sergilemektedir.
-
+This project goes beyond traditional classification tasks, showcasing the ability to model a dynamic, strategic business problem using Reinforcement Learning.
